@@ -235,7 +235,7 @@
             return deferred;
 
             function doConnect() {
-                that.jsdoSession.login(that.username, that.password)
+                that.jsdoSession.login(username, password)
                     .done(function () {
                         that._isLoggedIn = true;
                         that._addCatalog()
