@@ -1,16 +1,15 @@
 (function ($) {
-    OfflineJSDODataSource = kendo.data.DataSource.extend({
+    OfflineDataSource = kendo.data.DataSource.extend({
         init: function (opts) {
             var that = this;
 
             opts = opts || {};
-            opts = $.extend(true, that.options, { batch: true }, opts);
+            opts = $.extend(true, {}, that.options, { batch: true }, opts);
 
-            var name = opts.name,
-                idField = null,
-                jsdo = that._createJSDO(name);
+            var jsdo = that._createJSDO(opts),
+                idField = null;
 
-            $.each(progress.data.ServicesManager.getResource(name).schema.properties, function (name, ds) {
+            $.each(progress.data.ServicesManager.getResource(jsdo.name).schema.properties, function (name, ds) {
                 $.each(ds.properties, function (name, tt) {
                     idField = tt.primaryKey[0];
                     return false;
@@ -155,13 +154,21 @@
             that.jsdo._offlineDeleteLocal();
         },
 
-        _createJSDO: function (name) {
-            var that = this,
-                jsdo = new progress.data.JSDO({
-                    name: name,
-                    autoFill: false
-                });
+        _createJSDO: function (opts) {
+            opts = opts || {};
 
+            var that = this,
+                jsdo = opts.jsdo || {};
+
+            if (!jsdo.name) {
+                jsdo.name = opts.name;
+            }
+
+            jsdo = $.extend(true, { 
+                autoFill: false
+            }, jsdo);
+
+            jsdo = new progress.data.JSDO(jsdo);
             jsdo._offlineFill = function (opts) {
                 var that = this, deferred = $.Deferred();
 

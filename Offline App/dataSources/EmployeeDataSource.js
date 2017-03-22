@@ -1,7 +1,6 @@
 (function ($) {
-    EmployeeDataSource = OfflineJSDODataSource.extend({
+    EmployeeDataSource = OfflineDataSource.extend({
         options: {
-            name: "Employee",
             schema: {
                 model: {
                     FullName: function () {
@@ -12,6 +11,10 @@
                         return "img/" + (this.EmpNum <= 10 ? this.EmpNum : "unknown") + ".jpg";
                     }
                 }
+            },
+
+            jsdo: {
+                name: "Employee"
             }
         }
     });
